@@ -5,16 +5,18 @@ import dropbox
 import webbrowser
 import requests
 import json
+import time
 from tqdm import tqdm
 from datetime import datetime
+
 date_today = "Event-" + datetime.today().strftime('%Y-%m-%d') + \
     "-"+str(random.randint(10, 1000))
 # put here path folder do you want put files inside it
-Path_drop = ""
+Path_drop = "/Backup/gts"
 # put here app_key
-App_key = ''
+App_key = '4v8zu9agemnmbqs'
 # put here secret_key
-Secret_key = ''
+Secret_key = '19hfgl77tf1jw55'
 # that's code for get refresh_Token  because access_token expret after 2h:
 
 authorization_url = "https://www.dropbox.com/oauth2/authorize?client_id=%s&response_type=code&token_access_type=offline" % App_key
@@ -91,8 +93,37 @@ def upload(
 #  Main
 
 
+dbx = dropbox.Dropbox(Token)
+
+
 def main():
-    upload(Token, "./test.txt", '{}/{}.txt'.format(Path_drop, date_today))
+    list = []
+    # get list files in dropbox :
+    try:
+        print("list files :")
+        for entry in dbx.files_list_folder(Path_drop).entries:
+            if isinstance(entry, dropbox.files.FileMetadata):
+                x = str(entry.name)
+                list.append(x)
+                print(x)
+    except Exception as e:
+        print(str(e))
+        print("can not get list files from drop box")
+    # delete file whhen have 5 files from dropbox
+    try:
+        if len(list) >= 5:
+            dbx.files_delete('{}/{}'.format(Path_drop, list[0]))
+            print("delete successfuly")
+    except Exception as e:
+        print(str(e))
+        print("can not deleted file from dropbox")
+        time.sleep(2)
+    try:
+        upload(Token, "./test.txt", '{}/{}.txt'.format(Path_drop, date_today))
+        print("upload successfuly")
+    except Exception as e:
+        print(str(e))
+        print("can not upload  file")
 
 
 if __name__ == '__main__':
