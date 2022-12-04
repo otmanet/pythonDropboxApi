@@ -12,11 +12,11 @@ from datetime import datetime
 date_today = "Event-" + datetime.today().strftime('%Y-%m-%d') + \
     "-"+str(random.randint(10, 1000))
 # put here path folder do you want put files inside it
-Path_drop = "/Backup/gts"
+Path_drop = ""
 # put here app_key
-App_key = '4v8zu9agemnmbqs'
+App_key = ''
 # put here secret_key
-Secret_key = '19hfgl77tf1jw55'
+Secret_key = ''
 # that's code for get refresh_Token  because access_token expret after 2h:
 
 authorization_url = "https://www.dropbox.com/oauth2/authorize?client_id=%s&response_type=code&token_access_type=offline" % App_key
